@@ -84,21 +84,44 @@ export default function Home() {
     setNextId(nextId + 1);
   };
 
+  // フルスクリーンを切り替える関数
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        // エラー処理: ユーザーが許可しなかった場合など
+        console.error(
+          `Fullscreen request failed: ${err.message} (${err.name})`
+        );
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
   return (
     <main>
-      <button
-        onClick={addComponent}
-        style={{
-          position: "fixed",
-          top: "10px",
-          left: "10px",
-          zIndex: 1000, // ボタンが一番手前に来るように
-          padding: "8px 16px",
-          cursor: "pointer",
-        }}
-      >
-        コンポーネントを追加
-      </button>
+      <div style={{ position: "fixed", top: "10px", left: "10px", zIndex: 1000, display: "flex", gap: "10px" }}>
+        <button
+          onClick={addComponent}
+          style={{
+            padding: "8px 16px",
+            cursor: "pointer",
+          }}
+        >
+          コンポーネントを追加
+        </button>
+        <button
+          onClick={toggleFullScreen}
+          style={{
+            padding: "8px 16px",
+            cursor: "pointer",
+          }}
+        >
+          全画面表示/解除
+        </button>
+      </div>
       <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
         {components.map((comp) => (
           <DraggableTextarea
